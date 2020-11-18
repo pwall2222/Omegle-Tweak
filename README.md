@@ -21,7 +21,8 @@ Tampermonkey
 Make sure you have Tampermonkey istalled and enabled, and then install this [UserScript](https://raw.githubusercontent.com/PWalll/omegle-tweak/master/omegle-tweaks.user.js) by clicking on this link and clicking install.
 
 If you done everything correctly you should have omegle looking like this the next time you open it:
-![Tweaked-Omegle](https://i.imgur.com/oAagEF3.png =960x470)
+
+![Tweaked-Omegle](https://i.imgur.com/oAagEF3.png=960x470)
 
 ## Authors
 
