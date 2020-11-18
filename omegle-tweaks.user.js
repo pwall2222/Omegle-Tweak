@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Omegle
+// @name         Omegle-Tweaks
 // @version      1.0
 // @author       PWall
 // @include      https://omegle.com/*
@@ -10,9 +10,9 @@
 
 (function() {
 	const dom = document.createElement('script');
-	dom.src = 'https://raw.githubusercontent.com/PWalll/omegle-tweak/master/dom.js';
+	dom.src = 'https://cdn.jsdelivr.net/gh/PWalll/omegle-tweak@master/dom.js';
 	document.head.appendChild(dom);
 	const index = document.createElement('script');
-	index.src = 'https://raw.githubusercontent.com/PWalll/omegle-tweak/master/index.js';
+	index.src = 'https://cdn.jsdelivr.net/gh/PWalll/omegle-tweak@master/index.js';
 	document.head.appendChild(index);
 })();
