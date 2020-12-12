@@ -135,11 +135,12 @@ const time = {
 		cinterval = interval.new(timeobj.updatediv, 1000);
 	},
 	api: async function (ip, time_ip) {
-		return fetch(`${time_ip}${ip}`).then(response =>
+		return fetch(`${time_ip}${ip}`).then(async response =>
 			{
-				const tdata = response.json()
-				tdata.utc_offset = "UTC " + tdata.utc_offset;
-				return tdata;
+			response = await response.json()
+			response.utc_offset = "UTC " + response.utc_offset;
+			console.log(response);
+			return response;
 			}).catch(error =>
 			{
 				return {
