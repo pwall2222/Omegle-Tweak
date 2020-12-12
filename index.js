@@ -12,6 +12,10 @@ let twiceskip = 0;
 let ainterval;
 let cinterval;
 
+/**
+ * 
+ * @param {String} ip 
+ */
 async function main(ip) {
 	interval.clear_both();
 	if (intervals.active.length > 32) {intervals.clear_active();}
@@ -25,6 +29,10 @@ async function main(ip) {
 	time.peers_time(info.time, ip);
 }
 
+/**
+ * 
+ * @param {String} ip 
+ */
 function check_ip(ip) {
 	const checkBox = $("banhistory").checked;
 	if (ips.blacklist.some(ips => ips == ip)) {
@@ -45,12 +53,15 @@ function check_ip(ip) {
 	return true;
 }
 
+/**
+ * 
+ * @param {String} ip 
+ */
 async function fetch_api(ip) {
 	const location_api = "https://ipwhois.app/json/";
 	const time_api = "https://worldtimeapi.org/api/ip/";
-	const location_data = await fetch(`${location_api}${ip}`).then(response => response.json());
-	const time_data = await fetch(`${time_api}${ip}`).then(response => response.json()).catch(error => {return {datetime:"00:00:00", utc_offset: "00:00", utc_offset: "error"}});
-	if(time_data.utc_offset != "error") {time_data.utc_offset = `UTC ${time_data.utc_offset}`}
+	const location_data = await fetch(`${location_api}${ip}`, {referrerPolicy: 'no-referrer'}).then(response => response.json());
+	const time_data = await time.api(ip, time_api);
 	const data = {
 		ip: ip,
 		city: location_data.city,
@@ -65,6 +76,11 @@ async function fetch_api(ip) {
 }
 
 const time = {
+	/**
+	 * 
+	 * @param {String} newtime 
+	 * @param {String} ip 
+	 */
 	peers_time: function (newtime, ip) {
 		const timeobj = {
 			hours: 0,
@@ -117,6 +133,21 @@ const time = {
 			}
 		};
 		cinterval = interval.new(timeobj.updatediv, 1000);
+	},
+	api: async function (ip, time_ip) {
+		return fetch(`${time_ip}${ip}`).then(response =>
+			{
+				const tdata = response.json()
+				tdata.utc_offset = "UTC " + tdata.utc_offset;
+				return tdata;
+			}).catch(error =>
+			{
+				return {
+					datetime: "00:00:00",
+					utc_offset: "00:00",
+					utc_offset: "error"
+				}
+			});
 	}
 };
 
@@ -216,6 +247,10 @@ const dom = {
 		}
 		observer.observe(targetNode, config);
 	},
+	/**
+	 * 
+	 * @param {Object} info 
+	 */
 	new_connection: function (info) {
 		const chat = document.getElementsByClassName("logitem")[0];
 		chat.innerHTML = /* html */`IP: ${info.ip} <br/>
@@ -243,12 +278,21 @@ const dom = {
 };
 
 const interval = {
+	/**
+	 * 
+	 * @param {Function} callback 
+	 * @param {Number} ms 
+	 */
 	new: function (callback, ms) {
 		const intrvl = setInterval(callback, ms);
 		intervals.active.push(intrvl);
 		intervals.all.push(intrvl);
 		return intrvl;
 	},
+	/**
+	 * 
+	 * @param {Number} intrvl 
+	 */
 	clear: function (intrvl) {
 		clearInterval(intrvl);
 		intervals.active.splice(intervals.active.indexOf(intrvl), 1);
