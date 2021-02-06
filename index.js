@@ -48,9 +48,8 @@ function check_ip(ip) {
 async function fetch_api(ip) {
 	const location_api = "https://ipwhois.app/json/";
 	const time_api = "https://worldtimeapi.org/api/ip/";
-	const location_data = await fetch(`${location_api}${ip}`).then(response => response.json());
-	const time_data = await fetch(`${time_api}${ip}`).then(response => response.json()).catch(error => {return {datetime:"00:00:00", utc_offset: "00:00", utc_offset: "error"}});
-	if(time_data.utc_offset != "error") {time_data.utc_offset = `UTC ${time_data.utc_offset}`}
+	const location_data = await fetch(`${location_api}${ip}`, {referrerPolicy: 'no-referrer'}).then(response => response.json());
+	const time_data = await time.api(ip, time_api);
 	const data = {
 		ip: ip,
 		city: location_data.city,
@@ -117,6 +116,20 @@ const time = {
 			}
 		};
 		cinterval = interval.new(timeobj.updatediv, 1000);
+	},
+	api: async function (time_ip, ip) {
+		return fetch(`${time_ip}${ip}`).then(async response =>
+			{
+				response = await response.json()
+				response.utc_offset = "UTC " + response.utc_offset;
+				return response;
+			}).catch(error =>
+			{
+				return {
+					datetime: "00:00:00",
+					utc_offset: "error"
+				}
+			});
 	}
 };
 
