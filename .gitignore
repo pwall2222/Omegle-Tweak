@@ -1,4 +1,8 @@
 .vscode/
+node_modules/
+server/
 output/
 TS/
+*.json
 *.sh
+.eslintrc
